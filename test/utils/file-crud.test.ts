@@ -4,6 +4,9 @@ import TestingUtils from "../src/testing.utils";
 import * as fs from 'fs';
 import * as path from 'path';
 
+const createdFiles: Array<string> = [];
+const createdFolders: Array<string> = [];
+
 describe('Crud Operations',
     () => {
 
@@ -14,7 +17,7 @@ describe('Crud Operations',
                 FileCRUD.filePath = newPath;
                 const crud = new FileCRUD();
                 expect(fs.existsSync(newPath)).toBeTruthy();
-                fs.rmdirSync(newPath);
+                createdFolders.push(newPath);
                 FileCRUD.filePath = defaultFilePath;
             }
         )
@@ -26,25 +29,62 @@ describe('Crud Operations',
                 fileCRUD.create(randomName);
                 const folderContents = fs.readdirSync(FileCRUD.filePath)
                 expect(folderContents.some(fileName => fileName == `${randomName}.${FileCRUD.fileType}`)).toBeTruthy();
-                // fs.unlinkSync(path.join(FileCRUD.filePath, `${randomName}.${FileCRUD.fileType}`));
+                createdFiles.push(path.join(FileCRUD.filePath, `${randomName}.${FileCRUD.fileType}`));
             }
         )
 
-        it ('should delete a file',
+        it('should read the contents of the file correctly',
             () => {
-                expect(true).toBeTruthy();
+                const fileCRUD = new FileCRUD();
+                const randomFileName = TestingUtils.generateRandomStringWithLength(15);
+                const filePath = path.join(FileCRUD.filePath, randomFileName);
+                const randomString = TestingUtils.generateRandomStringWithLength(50);
+                fs.writeFileSync(`${filePath}.${FileCRUD.fileType}`, randomString);
+                createdFiles.push(`${filePath}.${FileCRUD.fileType}`);
+                expect(randomString).toEqual(fileCRUD.read(randomFileName));
             }
         )
 
         it ('should update a file',
             () => {
-                expect(true).toBeTruthy();
+                const fileCRUD = new FileCRUD();
+                const randomFileName = TestingUtils.generateRandomStringWithLength(15);
+                const filePath = path.join(FileCRUD.filePath, randomFileName);
+                fs.writeFileSync(`${filePath}.${FileCRUD.fileType}`, '{}');
+                createdFiles.push(`${filePath}.${FileCRUD.fileType}`);
+                const randomData = TestingUtils.generateRandomStringWithLength(50);
+                fileCRUD.update(randomFileName, randomData);
+                expect(randomData).toEqual(fs.readFileSync(`${filePath}.${FileCRUD.fileType}`, 'utf8'));
+                fileCRUD.update(randomFileName, randomData);
+                expect(randomData).toEqual(fs.readFileSync(`${filePath}.${FileCRUD.fileType}`, 'utf8'));
+                fileCRUD.update(randomFileName, `${randomData}${randomData}`);
+                expect(`${randomData}${randomData}`).toEqual(fs.readFileSync(`${filePath}.${FileCRUD.fileType}`, 'utf8'));
             }
         )
 
-        it('should delete a file',
+        it ('should delete a file',
             () => {
-                expect(true).toBeTruthy();
+                const fileCRUD = new FileCRUD();
+                const randomFileName = TestingUtils.generateRandomStringWithLength(15);
+                const filePath = path.join(FileCRUD.filePath, randomFileName);
+                fs.writeFileSync(`${filePath}.${FileCRUD.fileType}`, '{}');
+                createdFiles.push(`${filePath}.${FileCRUD.fileType}`);
+                fileCRUD.delete(randomFileName);
+                const folderContents = fs.readdirSync(FileCRUD.filePath);
+                expect(folderContents.every(fileName => fileName != `${filePath}.${FileCRUD.fileType}`)).toBeTruthy();
+            }
+        )
+
+        afterAll(
+            () => {
+                createdFolders
+                    .filter(fs.existsSync)
+                    .forEach(fs.rmdirSync)
+                
+
+                createdFiles
+                    .filter(fs.existsSync)
+                    .forEach(fs.unlinkSync)
             }
         )
     }

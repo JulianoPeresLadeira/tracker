@@ -5,6 +5,7 @@ export default class FileCRUD {
 
     public static filePath: string = 'data';
     public static fileType: string = 'json';
+    public static encoding: string = 'utf8';
 
     constructor() {
         if (!this.filePathExists()) {
@@ -20,28 +21,51 @@ export default class FileCRUD {
         fs.mkdirSync(FileCRUD.filePath);        
     }
 
+    private fileExists(filePath: string): boolean {
+        return fs.existsSync(filePath);
+    }
+
+    private buildPath(fileName: string): string {
+        return `${path.join(FileCRUD.filePath, fileName)}.${FileCRUD.fileType}`;
+    }
+
     public create(fileName: string): void {
-        const fileExists = (filePath) =>  fs.existsSync(filePath);
+        const filePath = this.buildPath(fileName);
 
-        const filePath = `${path.join(FileCRUD.filePath, fileName)}.${FileCRUD.fileType}`;
-
-        if (fileExists(filePath)) {
+        if (this.fileExists(filePath)) {
             throw new Error('FILE_ALREADY_EXISTS');
         }
 
-        fs.writeFileSync(filePath, '');
+        fs.writeFileSync(filePath, '{}');
     }
 
-    public read() {
+    public read(fileName: string): string {
+        const filePath = this.buildPath(fileName);
 
+        if (!this.fileExists(filePath)) {
+            throw new Error('FILE_NOT_FOUND');
+        }
+
+        return fs.readFileSync(filePath, FileCRUD.encoding);
     }
 
-    public update() {
+    public update(fileName: string, data: string): void {
+        const filePath = this.buildPath(fileName);
 
+        if (!this.fileExists(filePath)) {
+            throw new Error('FILE_NOT_FOUND');
+        }
+
+        fs.writeFileSync(filePath, data);
     }
 
-    public delete() {
+    public delete(fileName: string): void {
+        const filePath = this.buildPath(fileName);
+        
+        if (!this.fileExists(filePath)) {
+            throw new Error('FILE_NOT_FOUND');
+        }
 
+        fs.unlinkSync(filePath);
     }
-
 }
