@@ -29,14 +29,14 @@ export default class FileCRUD {
         return `${path.join(FileCRUD.filePath, fileName)}.${FileCRUD.fileType}`;
     }
 
-    public create(fileName: string): void {
+    public create(fileName: string, data: string): void {
         const filePath = this.buildPath(fileName);
 
         if (this.fileExists(filePath)) {
             throw new Error('FILE_ALREADY_EXISTS');
         }
 
-        fs.writeFileSync(filePath, '{}');
+        fs.writeFileSync(filePath, data);
     }
 
     public read(fileName: string): string {

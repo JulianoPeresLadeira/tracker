@@ -26,7 +26,8 @@ describe('Crud Operations',
             () => {
                 const fileCRUD = new FileCRUD();
                 const randomName = TestingUtils.generateRandomStringWithLength(15);
-                fileCRUD.create(randomName);
+                const randomString = TestingUtils.generateRandomStringWithLength(50);
+                fileCRUD.create(randomName, randomString);
                 const folderContents = fs.readdirSync(FileCRUD.filePath)
                 expect(folderContents.some(fileName => fileName == `${randomName}.${FileCRUD.fileType}`)).toBeTruthy();
                 createdFiles.push(path.join(FileCRUD.filePath, `${randomName}.${FileCRUD.fileType}`));
