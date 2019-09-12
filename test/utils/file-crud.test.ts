@@ -22,6 +22,16 @@ describe('Crud Operations',
             }
         )
 
+        it('should throw file already exists error',
+            () => {
+                const crud = new FileCRUD();
+                const originalMethod = FileCRUD.prototype['fileExists'];
+                FileCRUD.prototype['fileExists'] = (inp) => true;
+                expect(() => crud.create(TestingUtils.generateRandomStringWithLength(10), '{}')).toThrow('FILE_ALREADY_EXISTS')
+                FileCRUD.prototype['fileExists'] = originalMethod;
+            }
+        )
+
         it('should create a file',
             () => {
                 const fileCRUD = new FileCRUD();
