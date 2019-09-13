@@ -1,23 +1,30 @@
 #!/usr/bin/env node
 
+import Action from "./actions/action";
+import routes from "./routes";
+
 const removeDefaultProcessArguments = () => {
     // Remove node location
     process.argv.shift();
     // Remove index.js location
     process.argv.shift();
 }
+const formatArguments = (args) => args.join(' ').split(' ').join(' ');
+const getAction = (programArguments) => {
+    const action = programArguments.split(' ')[0];
+    return action;
+}
+const createAction: ((actionIdentifier: string, args: Array<string>) => Action) = (actionIdentifier, args) => {
+    if (routes.hasOwnProperty(actionIdentifier)) {
+        return new routes[actionIdentifier](args);
+    }
 
-const getParameters = (programArguments) => {
-    const action = programArguments.shift();
-    const targetDatabase = programArguments.pop();
-    const targetDatabasePrefix = programArguments.pop();
-    const entry = programArguments.join(' ');
-
-    return {action, targetDatabase, entry}
+    throw new Error('ACTION_NOT_FOUND');
 }
 
 removeDefaultProcessArguments();
+const args = formatArguments(process.argv);
+const actionIdentifier = getAction(args);
+const action = createAction(actionIdentifier, args);
 
-const executionParameters = getParameters(process.argv)
-
-console.log(executionParameters)
+action.act();

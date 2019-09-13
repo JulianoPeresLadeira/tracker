@@ -1,5 +1,5 @@
 import TrackedListManager from "../manager/manager";
-import { Action } from "./action";
+import Action from "./action";
 
 export default class CreateAction extends Action {
 

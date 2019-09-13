@@ -1,4 +1,4 @@
-export abstract class Action {
+export default abstract class Action {
 
     protected command: string;
 
@@ -7,8 +7,18 @@ export abstract class Action {
     }
 
     protected getCommandErrors(): Array<string> { return []; }
+    protected validateErrors(): void {
+        const errors = this.getCommandErrors();
+    
+        if (errors.length > 0) {
+            errors.forEach(
+                error => console.log(error)
+            );
+            throw new Error(errors.join('\n'));
+        }
+    }
 
-    public abstract act(command: string): void;
+    public abstract act(): void;
     public static printHelp(): void {};
 
 }
