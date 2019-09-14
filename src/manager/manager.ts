@@ -1,4 +1,4 @@
-import FileCRUD from "../utils/file-crud";
+import FileCRUD from "../persistence/file-crud";
 import StringParser from "../parser/string.parser";
 import Parser from "../parser/parser";
 import TrackedList from "../models/tracked-list.model";
@@ -52,5 +52,9 @@ export default class TrackedListManager {
 
         const list = getData();
         return list.entries.map((entry: Entry) => `${entry.index} - ${entry.data}`);
+    }
+
+    public static getListNames(): Array<string> {
+        return TrackedListManager.crud.getListNames();
     }
 }

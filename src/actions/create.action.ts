@@ -4,7 +4,6 @@ import Action from "./action";
 export default class CreateAction extends Action {
 
     protected getCommandErrors(): Array<string> {
-
         let errors: Array<string> = [];
         
         const splitCommand = this.command.split(' ');
@@ -27,17 +26,7 @@ export default class CreateAction extends Action {
         return splitCommand.filter((commandWord, index) => index % 2 == 0);
     }
 
-    public act(): void {
-
-        const errors = this.getCommandErrors();
-
-        if (errors.length > 0) {
-            errors.forEach(
-                error => console.log(error)
-            );
-            throw new Error(errors.join('\n'));
-        }
-
+    protected perform(): void {
         const targetList = this.getTargetListNames();
         targetList.forEach(target => TrackedListManager.createTrackedList(target))
     }

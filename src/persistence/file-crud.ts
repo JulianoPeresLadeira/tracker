@@ -68,4 +68,13 @@ export default class FileCRUD {
 
         fs.unlinkSync(filePath);
     }
+
+    public getListNames(): Array<string> {
+        const getListName = (fileName) => {
+            const splitFileName = fileName.split('.');
+            splitFileName.pop();
+            return splitFileName.join('.');
+        }
+        return fs.readdirSync(FileCRUD.filePath).map(getListName);
+    }
 }

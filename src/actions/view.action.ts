@@ -1,31 +1,15 @@
 import Action from "./action";
 import TrackedListManager from "../manager/manager";
+import Validations from "./utils/validations";
+import Commons from "./utils/commons";
 
 export default class ViewAction extends Action {
 
-    protected getCommandErrors(): Array<string> {
 
-        let errors: Array<string> = [];
-        
-        const splitCommand = this.command.split(' ');
-        splitCommand.shift();
-        
-        if (splitCommand.length !== 1) {
-            errors.push('INVALID_INPUT');
-        }
-            
-        return errors;
-    }
-    
-    private getTargetTrackedList(): string {
-        const splitCommand = this.command.split(' ');
-        splitCommand.shift();
-        return splitCommand[0];
-    }
+    protected getCommandErrors = Validations.singleParameterCommandValidation(this.command);
 
-    public act(): void {
-        super.validateErrors();
-        const data: Array<string> = TrackedListManager.getTrackedListData(this.getTargetTrackedList());
+    protected perform(): void {
+        const data: Array<string> = TrackedListManager.getTrackedListData(Commons.getParameter(this.command));
 
         data.forEach(
             entry => console.log(entry)

@@ -1,5 +1,5 @@
 import TrackedListManager from "../../src/manager/manager";
-import FileCRUD from "../../src/utils/file-crud";
+import FileCRUD from "../../src/persistence/file-crud";
 import Entry from "../../src/models/entry.model";
 
 jest.mock('moment', () => () => ({format: () => '2019–01–01T00:00:00+00:00'}));

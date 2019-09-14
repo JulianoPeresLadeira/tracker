@@ -7,7 +7,7 @@ export default abstract class Action {
     }
 
     protected getCommandErrors(): Array<string> { return []; }
-    protected validateErrors(): void {
+    private validateErrors(): void {
         const errors = this.getCommandErrors();
     
         if (errors.length > 0) {
@@ -18,7 +18,12 @@ export default abstract class Action {
         }
     }
 
-    public abstract act(): void;
-    public static printHelp(): void {};
+    public act(): void {
+        this.validateErrors();
+        this.perform();
+    };
+
+    protected abstract perform(): void;
+    public static printHelp(): void {}
 
 }

@@ -35,16 +35,7 @@ export default class AddAction extends Action {
         return splitCommand.join(' ');
     }
 
-    public act(): void {
-        const errors = this.getCommandErrors();
-
-        if (errors.length > 0) {
-            errors.forEach(
-                error => console.log(error)
-            );
-            throw new Error(errors.join('\n'));
-        }
-
+    protected perform(): void {
         const targetTrackedList = this.getTargetTrackedList();
         const entryData = this.getEntryData();
 

@@ -1,4 +1,4 @@
-import FileCRUD from "../../src/utils/file-crud";
+import FileCRUD from "../../src/persistence/file-crud";
 import TestingUtils from "../src/testing.utils";
 
 import * as fs from 'fs';
@@ -86,7 +86,34 @@ describe('Crud Operations',
             }
         )
 
-        afterAll(
+        it('should return the names of the files correctly',
+            () => {
+                
+                let filesToCreate = 10;
+                let listNames: Array<string> = [];
+
+                while (filesToCreate > 0) {
+                    const randomFileName = TestingUtils.generateRandomStringWithLength(15);
+                    const filePath = path.join(FileCRUD.filePath, randomFileName);
+                    fs.writeFileSync(`${filePath}.${FileCRUD.fileType}`, '{}');
+                    createdFiles.push(`${filePath}.${FileCRUD.fileType}`);
+                    listNames.push(randomFileName);
+                    filesToCreate--;
+                }
+
+                const fileCRUD = new FileCRUD();
+                const filesFound = fileCRUD.getListNames();
+
+                expect(filesFound).toHaveLength(listNames.length);
+                listNames.forEach(
+                    listName => {
+                        expect(filesFound.some(name => name === listName)).toBeTruthy();
+                    }
+                );
+            }
+        )
+
+        afterEach(
             () => {
                 createdFolders
                     .filter(fs.existsSync)
