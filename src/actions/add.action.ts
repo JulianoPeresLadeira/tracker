@@ -19,7 +19,8 @@ export default class AddAction extends Action {
             errors.push('INVALID_INPUT');
         }
 
-        return errors;
+        const duplicatesRemoved = errors.reduce((acc, curr) => {acc[curr] = true; return acc}, {})
+        return Object.keys(duplicatesRemoved);
     }
 
     private getTargetTrackedList(): string {

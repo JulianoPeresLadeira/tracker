@@ -9,6 +9,7 @@ beforeEach(
     () => {
         target = TrackedListManager.createTrackedList = jest.fn();
         console.log = jest.fn();
+        jest.spyOn(process, 'exit').mockImplementation();
     }
 )
 
@@ -38,13 +39,7 @@ it('should throw error',
         const errorMessage = Errors.getErrorMessage('INVALID_INPUT', 'create', ['test1', '&', 'test2', '&', 'test3']);
         const command = 'create test1 & test2 & test3'
         action =  new CreateAction(command);
-        expect(() => action.act()).toThrow(errorMessage)
-    }
-)
-
-it('should print the help message',
-    () => {
-        CreateAction.printHelp();
-        expect(console.log).toHaveBeenCalled();
+        action.act();
+        expect(console.log).toHaveBeenCalledWith(errorMessage);
     }
 )

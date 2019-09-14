@@ -9,6 +9,7 @@ beforeEach(
     () => {
         target = TrackedListManager.getTrackedListData = jest.fn(test => ['1','2','3']);
         console.log = jest.fn();
+        jest.spyOn(process, 'exit').mockImplementation();
     }
 )
 
@@ -28,13 +29,7 @@ it('should throw error',
         const errorMessage = Errors.getErrorMessage('INVALID_INPUT', 'view', ['test', 'and', 'another', 'test'])
         const command = 'view test and another test';
         action = new ViewAction(command);
-        expect(() => action.act()).toThrow(errorMessage);
-    }
-)
-
-it('should print the help message',
-    () => {
-        ViewAction.printHelp();
-        expect(console.log).toHaveBeenCalled();
+        action.act();
+        expect(console.log).toHaveBeenCalledWith(errorMessage);
     }
 )

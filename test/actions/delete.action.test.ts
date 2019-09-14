@@ -9,6 +9,7 @@ beforeEach(
     () => {
         target = TrackedListManager.deleteTrackedList = jest.fn();
         console.log = jest.fn();
+        jest.spyOn(process, 'exit').mockImplementation();
     }
 )
 
@@ -27,13 +28,7 @@ it('should throw error',
         const errorMessage = Errors.getErrorMessage('INVALID_INPUT', 'delete', ['test', 'and', 'another', 'test']);
         const command = 'delete test and another test';
         action = new DeleteAction(command);
-        expect(() => action.act()).toThrow(errorMessage);
-    }
-)
-
-it('should print the help message',
-    () => {
-        DeleteAction.printHelp();
-        expect(console.log).toHaveBeenCalled();
+        action.act();
+        expect(console.log).toHaveBeenCalledWith(errorMessage);
     }
 )

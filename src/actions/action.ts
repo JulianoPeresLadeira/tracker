@@ -12,16 +12,14 @@ export default abstract class Action {
         const splitCommand = this.command.split(' ')
         const actionIdentifier = <string>splitCommand.shift();
         const errorMessages = errors.map(error => Errors.getErrorMessage(error, actionIdentifier, splitCommand));
-        throw errorMessages.join('\n')
+        console.log(errorMessages.join('\n'));
+        process.exit(1);
     }
 
     private validateErrors(): void {
         const errors = this.getCommandErrors();
         
         if (errors.length > 0) {
-            errors.forEach(
-                error => console.log(error)
-            );
             this.throwError(errors);
         }
     }

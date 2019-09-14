@@ -6,6 +6,7 @@ let action: VersionAction;
 beforeEach(
     () => {
         console.log = jest.fn();
+        jest.spyOn(process, 'exit').mockImplementation();
     }
 )
 
@@ -32,15 +33,7 @@ it('should throw invalid input error',
         const errorMessage = Errors.getErrorMessage('INVALID_INPUT', '-v', ['test'])
         const command = '-v test'
         action = new VersionAction(command);
-        expect(() => action.act()).toThrow(errorMessage);
+        action.act();
+        expect(console.log).toHaveBeenCalledWith(errorMessage);
     }
 )
-
-
-it('should print the help message',
-    () => {
-        VersionAction.printHelp();
-        expect(console.log).toHaveBeenCalled();
-    }
-)
-

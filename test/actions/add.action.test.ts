@@ -9,6 +9,7 @@ beforeEach(
     () => {
         target = TrackedListManager.addEntryToTrackedList = jest.fn();
         console.log = jest.fn();
+        jest.spyOn(process, 'exit').mockImplementation();
     }
 )
 
@@ -21,23 +22,25 @@ it ('should call add entry with the passed parameter',
     }
 )
 
-describe('Test is exception are thrown',
+describe('Test if exceptions are thrown',
     () => {
         it('should throw exception on malformed input',
             () => {
-                const errorMessage = Errors.getErrorMessage('INVALID_INPUT', 'add', []);
+                const errorMessage = Errors.getErrorMessage('INVALID_INPUT', 'view', []);
                 const command = 'add'
                 action = new AddAction(command);
-                expect(() => action.act()).toThrow(errorMessage);
+                action.act()
+                expect(console.log).toHaveBeenCalledWith(errorMessage);
             }
         )
 
         it('should throw exception on malformed input',
             () => {
-                const errorMessage = Errors.getErrorMessage('INVALID_INPUT', 'add', ['test']);
+                const errorMessage = Errors.getErrorMessage('INVALID_INPUT', 'view', []);
                 const command = 'add test'
                 action = new AddAction(command);
-                expect(() => action.act()).toThrow(errorMessage);
+                action.act();
+                expect(console.log).toHaveBeenCalledWith(errorMessage);
             }
         )
         it('should throw exception on malformed input',
@@ -45,15 +48,10 @@ describe('Test is exception are thrown',
                 const errorMessage = Errors.getErrorMessage('INVALID_INPUT', 'add', ['test', 'test', 'test', 'test']);
                 const command = 'add test test test test'
                 action = new AddAction(command);
-                expect(() => action.act()).toThrow(errorMessage);
+                action.act();
+                expect(console.log).toHaveBeenCalledWith(errorMessage);
+
             }
         )
-    }
-)
-
-it('should print the help message',
-    () => {
-        AddAction.printHelp();
-        expect(console.log).toHaveBeenCalled();
     }
 )

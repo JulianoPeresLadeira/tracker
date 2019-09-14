@@ -9,6 +9,7 @@ beforeEach(
     () => {
         target = TrackedListManager.getListNames = jest.fn(() => ['test']);
         console.log = jest.fn();
+        jest.spyOn(process, 'exit').mockImplementation();
     }
 )
 
@@ -21,27 +22,22 @@ it('should call console.log',
     }
 )
 
-it('should throw error',
+it('should throw error because too many parameters',
     () => {
         const errorMessage = Errors.getErrorMessage('INVALID_INPUT', 'view', ['lists', 'and', 'throw', 'error', 'please']);
         const command = 'show lists and throw error please';
         action = new ShowAction(command);
-        expect(() => action.act()).toThrow(errorMessage);
+        action.act();
+        expect(console.log).toHaveBeenCalledWith(errorMessage);
     }
 )
 
-it('should throw error',
+it('should throw error because too few parameters',
     () => {
-        const errorMessage = Errors.getErrorMessage('INVALID_INPUT', 'view', []);
+        const errorMessage = [Errors.getErrorMessage('MISSING_PARAMETER', 'view', []), Errors.getErrorMessage('INVALID_INPUT', 'view', [])].join('\n');
         const command = 'show';
         action = new ShowAction(command);
-        expect(() => action.act()).toThrowError(errorMessage);
-    }
-)
-
-it('should print the help message',
-    () => {
-        ShowAction.printHelp();
-        expect(console.log).toHaveBeenCalled();
+        action.act();
+        expect(console.log).toHaveBeenCalledWith(errorMessage);
     }
 )

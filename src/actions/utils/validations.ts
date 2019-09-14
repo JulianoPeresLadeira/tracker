@@ -6,7 +6,11 @@ export default class Validations {
             
             const splitCommand = command.split(' ');
             splitCommand.shift();
-            
+    
+            if (splitCommand.length === 0) {
+                errors.push('MISSING_PARAMETER');
+            }
+
             if (splitCommand.length !== 1) {
                 errors.push('INVALID_INPUT');
             }
