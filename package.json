@@ -1,6 +1,6 @@
 {
   "name": "@juliano.ladeira/tracker",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Simple tracker program",
   "main": "build/index.js",
   "scripts": {
@@ -10,7 +10,7 @@
   "prepublish": "tsc",
   "types": "build/index.d.ts",
   "bin": {
-    "track": "./build/index.js"
+    "tracker": "./build/index.js"
   },
   "repository": {
     "type": "git",
