@@ -1,4 +1,5 @@
 import VersionAction from "../../src/actions/version.action"
+import Errors from "../../src/actions/utils/errors";
 
 let action: VersionAction;
 
@@ -28,9 +29,10 @@ it('should call console.log',
 
 it('should throw invalid input error',
     () => {
+        const errorMessage = Errors.getErrorMessage('INVALID_INPUT', '-v', ['test'])
         const command = '-v test'
         action = new VersionAction(command);
-        expect(() => action.act()).toThrowError('INVALID_INPUT');
+        expect(() => action.act()).toThrow(errorMessage);
     }
 )
 

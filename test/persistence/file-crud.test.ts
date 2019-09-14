@@ -3,6 +3,7 @@ import TestingUtils from "../src/testing.utils";
 
 import * as fs from 'fs';
 import * as path from 'path';
+import Errors from "../../src/actions/utils/errors";
 
 const createdFiles: Array<string> = [];
 const createdFolders: Array<string> = [];
@@ -26,8 +27,10 @@ describe('Crud Operations',
             () => {
                 const crud = new FileCRUD();
                 const originalMethod = FileCRUD.prototype['fileExists'];
+                const fileName = TestingUtils.generateRandomStringWithLength(10)
+                const errorMessage = Errors.getErrorMessage('FILE_ALREADY_EXISTS', 'create', [fileName]);
                 FileCRUD.prototype['fileExists'] = (inp) => true;
-                expect(() => crud.create(TestingUtils.generateRandomStringWithLength(10), '{}')).toThrow('FILE_ALREADY_EXISTS')
+                expect(() => crud.create(fileName, '{}')).toThrow(errorMessage)
                 FileCRUD.prototype['fileExists'] = originalMethod;
             }
         )
@@ -89,6 +92,12 @@ describe('Crud Operations',
         it('should return the names of the files correctly',
             () => {
                 
+                const originalFilePath = FileCRUD.filePath;
+                FileCRUD.filePath = TestingUtils.generateRandomStringWithLength(10);
+
+                fs.mkdirSync(FileCRUD.filePath);
+                createdFolders.push(FileCRUD.filePath);
+
                 let filesToCreate = 10;
                 let listNames: Array<string> = [];
 
@@ -103,7 +112,7 @@ describe('Crud Operations',
 
                 const fileCRUD = new FileCRUD();
                 const filesFound = fileCRUD.getListNames();
-
+                FileCRUD.filePath = originalFilePath;
                 expect(filesFound).toHaveLength(listNames.length);
                 listNames.forEach(
                     listName => {
@@ -114,16 +123,14 @@ describe('Crud Operations',
         )
 
         afterEach(
-            () => {
-                createdFolders
-                    .filter(fs.existsSync)
-                    .forEach(fs.rmdirSync)
-                
-
+            () => {                
                 createdFiles
                     .filter(fs.existsSync)
                     .forEach(fs.unlinkSync)
-            }
+                createdFolders
+                    .filter(fs.existsSync)
+                    .forEach(fs.rmdirSync)
+            }                
         )
     }
 )

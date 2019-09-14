@@ -16,13 +16,12 @@ export default class ViewAction extends Action {
         )
     }
 
-    public static printHelp(): void {
+    public static getHelpMessage(): Array<string> {
         const message = [
             'Views all the entries on target list',
             'Usage:',
             '   view <list>',
         ]
-
-        console.log(message.join('\n'));
+        return message;
     }
 }

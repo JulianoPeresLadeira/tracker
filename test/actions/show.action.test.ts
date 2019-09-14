@@ -1,5 +1,6 @@
 import ShowAction from "../../src/actions/show.action"
 import TrackedListManager from "../../src/manager/manager";
+import Errors from "../../src/actions/utils/errors";
 
 let action: ShowAction;
 let target: Function;
@@ -22,17 +23,19 @@ it('should call console.log',
 
 it('should throw error',
     () => {
+        const errorMessage = Errors.getErrorMessage('INVALID_INPUT', 'view', ['lists', 'and', 'throw', 'error', 'please']);
         const command = 'show lists and throw error please';
         action = new ShowAction(command);
-        expect(() => action.act()).toThrowError('INVALID_INPUT');
+        expect(() => action.act()).toThrow(errorMessage);
     }
 )
 
 it('should throw error',
     () => {
+        const errorMessage = Errors.getErrorMessage('INVALID_INPUT', 'view', []);
         const command = 'show';
         action = new ShowAction(command);
-        expect(() => action.act()).toThrowError('INVALID_INPUT');
+        expect(() => action.act()).toThrowError(errorMessage);
     }
 )
 

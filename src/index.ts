@@ -2,6 +2,7 @@
 
 import Action from "./actions/action";
 import routes from "./routes";
+import Errors from "./actions/utils/errors";
 
 const removeDefaultProcessArguments = () => {
     // Remove node location
@@ -19,7 +20,7 @@ const createAction: ((actionIdentifier: string, args: Array<string>) => Action) 
         return new routes[actionIdentifier](args);
     }
 
-    throw new Error('ACTION_NOT_FOUND');
+    Errors.exitWithError(Errors.getErrorMessage('ACTION_NOT_FOUND', actionIdentifier, args));
 }
 
 removeDefaultProcessArguments();

@@ -13,5 +13,7 @@ export default class Routes {
     public static help = HelpAction;
     public static show = ShowAction;
     public static version = VersionAction;
+    public static '-v' = VersionAction;
     public static view = ViewAction;
+
 }

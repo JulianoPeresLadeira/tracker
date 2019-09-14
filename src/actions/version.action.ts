@@ -9,15 +9,14 @@ export default class VersionAction extends Action {
         console.log(packageInformation.version);
     }
 
-    public static printHelp(): void {
+    public static getHelpMessage(): Array<string> {
         const message = [
             'Shows current version of the program',
             'Usage:',
             '   -v',
             '   version'
         ];
-
-        console.log(message.join('\n'));
+        return message;
     }
 
 }

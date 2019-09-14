@@ -31,15 +31,13 @@ export default class CreateAction extends Action {
         targetList.forEach(target => TrackedListManager.createTrackedList(target))
     }
 
-    public static printHelp(): void {
+    public static getHelpMessage(): Array<string> {
         const message = [
             'Creates a new tracked list.',
             'Usage:',
             '   create <list>',
-            '   create <list1> and <list2> and <list3>...',
-            'to create the passed list(s)'
+            '   create <list1> and <list2> and <list3>...'
         ]
-
-        console.log(message.join('\n'));
+        return message;
     }
 }

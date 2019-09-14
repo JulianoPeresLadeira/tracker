@@ -1,5 +1,6 @@
 import * as path from 'path';
 import * as fs from 'fs';
+import Errors from '../actions/utils/errors';
 
 export default class FileCRUD {
 
@@ -33,7 +34,8 @@ export default class FileCRUD {
         const filePath = this.buildPath(fileName);
 
         if (this.fileExists(filePath)) {
-            throw new Error('FILE_ALREADY_EXISTS');
+            const errorMessage = Errors.getErrorMessage('FILE_ALREADY_EXISTS', 'create', [fileName])
+            Errors.exitWithError(errorMessage);
         }
 
         fs.writeFileSync(filePath, data);
@@ -43,7 +45,8 @@ export default class FileCRUD {
         const filePath = this.buildPath(fileName);
 
         if (!this.fileExists(filePath)) {
-            throw new Error('FILE_NOT_FOUND');
+            const errorMessage = Errors.getErrorMessage('FILE_NOT_FOUND', 'view', [fileName])
+            Errors.exitWithError(errorMessage);
         }
 
         return fs.readFileSync(filePath, FileCRUD.encoding);
@@ -53,7 +56,9 @@ export default class FileCRUD {
         const filePath = this.buildPath(fileName);
 
         if (!this.fileExists(filePath)) {
-            throw new Error('FILE_NOT_FOUND');
+            const errorMessage = Errors.getErrorMessage('FILE_NOT_FOUND', 'update', [fileName])
+            Errors.exitWithError(errorMessage);
+
         }
 
         fs.writeFileSync(filePath, data);
@@ -63,7 +68,8 @@ export default class FileCRUD {
         const filePath = this.buildPath(fileName);
         
         if (!this.fileExists(filePath)) {
-            throw new Error('FILE_NOT_FOUND');
+            const errorMessage = Errors.getErrorMessage('FILE_NOT_FOUND', 'delete', [fileName])
+            Errors.exitWithError(errorMessage);
         }
 
         fs.unlinkSync(filePath);

@@ -17,14 +17,13 @@ export default class ShowAction extends Action {
         names.forEach(name => console.log(name));
     }
 
-    public static printHelp(): void {
+    public static getHelpMessage(): Array<string> {
         const message = [
             'Shows every list currently being persisted',
             'Usage:',
-            '   show lists',
-            'to add the selected entry to the list'
+            '   show lists'
         ]
 
-        console.log(message.join('\n'));
+        return message;
     }
 }

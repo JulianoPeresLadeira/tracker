@@ -1,5 +1,6 @@
 import ViewAction from "../../src/actions/view.action"
 import TrackedListManager from "../../src/manager/manager";
+import Errors from "../../src/actions/utils/errors";
 
 let action: ViewAction;
 let target: Function;
@@ -24,9 +25,10 @@ it ('should call add entry with the passed parameter',
 
 it('should throw error',
     () => {
+        const errorMessage = Errors.getErrorMessage('INVALID_INPUT', 'view', ['test', 'and', 'another', 'test'])
         const command = 'view test and another test';
         action = new ViewAction(command);
-        expect(() => action.act()).toThrowError('INVALID_INPUT');
+        expect(() => action.act()).toThrow(errorMessage);
     }
 )
 

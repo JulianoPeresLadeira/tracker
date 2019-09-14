@@ -42,7 +42,7 @@ export default class AddAction extends Action {
         TrackedListManager.addEntryToTrackedList(targetTrackedList, entryData);
     }
 
-    public static printHelp(): void {
+    public static getHelpMessage(): Array<string> {
         const message = [
             'Adds a new entry to the given target list',
             'Usage:',
@@ -50,6 +50,6 @@ export default class AddAction extends Action {
             'to add the selected entry to the list'
         ]
 
-        console.log(message.join('\n'));
+        return message;
     }
 }

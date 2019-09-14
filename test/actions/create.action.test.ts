@@ -1,5 +1,6 @@
 import TrackedListManager from "../../src/manager/manager"
 import CreateAction from "../../src/actions/create.action"
+import Errors from "../../src/actions/utils/errors";
 
 let action: CreateAction;
 let target: Function;
@@ -34,9 +35,10 @@ it('should call create list multiple times',
 
 it('should throw error',
     () => {
+        const errorMessage = Errors.getErrorMessage('INVALID_INPUT', 'create', ['test1', '&', 'test2', '&', 'test3']);
         const command = 'create test1 & test2 & test3'
         action =  new CreateAction(command);
-        expect(() => action.act()).toThrow('INVALID_INPUT')
+        expect(() => action.act()).toThrow(errorMessage)
     }
 )
 

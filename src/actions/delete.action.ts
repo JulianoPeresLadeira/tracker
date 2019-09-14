@@ -12,14 +12,13 @@ export default class DeleteAction extends Action {
         TrackedListManager.deleteTrackedList(list);
     }
 
-    public static printHelp(): void {
+    public static getHelpMessage(): Array<string> {
         const message = [
             'Deletes a tracked list',
             'Usage:',
             '   delete <list>'
         ];
-
-        console.log(message.join('\n'));
+        return message;
     }
 
 }
