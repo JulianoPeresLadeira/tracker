@@ -1,10 +1,11 @@
 import * as path from 'path';
 import * as fs from 'fs';
+import * as os from 'os';
 import Errors from '../actions/utils/errors';
 
 export default class FileCRUD {
 
-    public static filePath: string = 'data';
+    public static filePath: string = path.join(os.homedir(), 'data', 'tracker');
     public static fileType: string = 'json';
     public static encoding: string = 'utf8';
 
@@ -19,7 +20,7 @@ export default class FileCRUD {
     }
 
     private createFilePath(): void {
-        fs.mkdirSync(FileCRUD.filePath);        
+        fs.mkdirSync(FileCRUD.filePath, { recursive: true });
     }
 
     private fileExists(filePath: string): boolean {
@@ -66,7 +67,7 @@ export default class FileCRUD {
 
     public delete(fileName: string): void {
         const filePath = this.buildPath(fileName);
-        
+
         if (!this.fileExists(filePath)) {
             const errorMessage = Errors.getErrorMessage('FILE_NOT_FOUND', 'delete', [fileName])
             Errors.exitWithError(errorMessage);
