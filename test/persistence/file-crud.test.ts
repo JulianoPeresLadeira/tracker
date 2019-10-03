@@ -59,7 +59,7 @@ describe('Crud Operations',
             }
         )
 
-        it ('should update a file',
+        it('should update a file',
             () => {
                 const fileCRUD = new FileCRUD();
                 const randomFileName = TestingUtils.generateRandomStringWithLength(15);
@@ -76,7 +76,7 @@ describe('Crud Operations',
             }
         )
 
-        it ('should delete a file',
+        it('should delete a file',
             () => {
                 const fileCRUD = new FileCRUD();
                 const randomFileName = TestingUtils.generateRandomStringWithLength(15);
@@ -91,7 +91,7 @@ describe('Crud Operations',
 
         it('should return the names of the files correctly',
             () => {
-                
+
                 const originalFilePath = FileCRUD.filePath;
                 FileCRUD.filePath = TestingUtils.generateRandomStringWithLength(10);
 
@@ -123,14 +123,14 @@ describe('Crud Operations',
         )
 
         afterEach(
-            () => {                
+            () => {
                 createdFiles
                     .filter(fs.existsSync)
                     .forEach(fs.unlinkSync)
                 createdFolders
                     .filter(fs.existsSync)
                     .forEach(fs.rmdirSync)
-            }                
+            }
         )
     }
 )
