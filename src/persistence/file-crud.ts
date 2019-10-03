@@ -5,7 +5,7 @@ import Errors from '../actions/utils/errors';
 
 export default class FileCRUD {
 
-    public static filePath: string = path.join(os.homedir(), 'data', 'tracker');
+    public static filePath: string = path.join(os.homedir(), 'tracker', 'data');
     public static fileType: string = 'json';
     public static encoding: string = 'utf8';
 
